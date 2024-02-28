@@ -18,11 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: macos-latest,   r: 'release'}
-          # - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
-          # - {os: ubuntu-latest,   r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -32,7 +29,11 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: Checkout submodule
-        run: git submodule update --init --recursive
+        env:
+          GIT_TERMINAL_PROMPT: '0' # Disables git prompt for username and password.
+        run: |
+          git config --global url."https://${{ secrets.GITHUB_PAT }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive
 
       - uses: r-lib/actions/setup-pandoc@v2
 
