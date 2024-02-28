@@ -16,5 +16,5 @@ A plot
 A thin wrapper around base plot.
 }
 \examples{
-myplot()
+myplot(1:10)
 }
