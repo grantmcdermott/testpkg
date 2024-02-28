@@ -1,0 +1,17 @@
+Package: testpkg
+Type: Package
+Title: Concise Summary of What the Package Does
+Version: 1.0
+Date: 2024-02-27
+Author: Grant McDermott
+Maintainer: Grant McDermott <grant.mcdermott@gmail.com>
+Description: More about what it does (maybe more than one line).
+License: GPL (>= 2)
+Encoding: UTF-8
+RoxygenNote: 7.3.1
+Suggests:
+  fontquiver,
+  rsvg,
+  svglite,
+  tinytest,
+  tinysnapshot (>= 0.0.3)
