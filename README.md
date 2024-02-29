@@ -41,7 +41,7 @@ When you first clone the repo (package), make sure to pull in the
 `tests/testsuite` submodule too. 
 
 ```sh
-git clone --recursive-submodules https://github.com/grantmcdermott/testpkg.git
+git clone --recurse-submodules https://github.com/grantmcdermott/testpkg.git
 ```
 
 Alternatively, if you have already cloned the repo in a way that doesn't grab
