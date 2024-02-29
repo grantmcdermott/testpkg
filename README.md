@@ -1,31 +1,33 @@
 # testpkg
 
-Example repo for offloading an R package's test suite into a Git submodule.
+Experimental repo for offloading an R package's test suite into a Git submodule.
 The sister repo (i.e., the actual submodule) is
 [here](https://github.com/grantmcdermott/testpkg-testsuite).
+
+Feedback welcome!
 
 ## Motivation
 
 **Problem:** Imagine that you are developing an R package. Like any good package
 maintainer, you have added loads of unit tests, backed by a CI framework (e.g.,
 GitHub Actions), to help ensure the quality of your package. Unfortunately,
-there's downside to being a good maintainer. In your case, the test artifacts
+there's downside to being a good citizen. In your case, the test artifacts
 themselves are taking up a lot of space. Maybe it's because your tests are run
 against inherently large objects like [image
 snapshots](https://github.com/vincentarelbundock/tinysnapshot). Or, maybe you
 just have to deal with really big datasets. Whatever the case, these large
-test artifacts are pushing you above CRAN's recommended 5 MB installation limit.
+test artifacts are pushing you above CRAN's recommended 5 MB installation limit. Annoying.
 
 **Solution:** Instead of bundling your tests as part of main R package (repo), you
 can offload them into a sister repo as a
 [Git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules). This sidesteps
 the whole large artifact problem (since tests live outside of the main package),
 helping to reduce the installation size of your package, and keep it within CRAN's
-recommended limits
+recommended limits.
 
 Note the implicit tradeoff: Since we don't bundle the tests as part of
 the main package, this means that all tests are going to be skipped on CRAN once
-we submit our package. Testing is only done locally or via GitHub Actions CI.
+we submit our package. Testing is only done locally or through GitHub Actions CI.
 For many package developers, this is likely to be an acceptable (desirable
 even!) tradeoff. After all, you can still provision a comprehensive and
 automated testing suite via GH Actions, which will run whenever you receive a
@@ -43,8 +45,8 @@ git clone --recursive-submodules https://github.com/grantmcdermott/testpkg.git
 ```
 
 Alternatively, if you have already cloned the repo in a way that doesn't grab
-any submodules---which is very likely to be the case if you cloned the repo
-through an IDE like VS Code or RStudio---then simply initiate and update the
+any submodules&mdash;which is very likely to be the case if you cloned the repo
+through an IDE like VS Code or RStudio&mdash;then simply initiate and update the
 submodule.
 
 ```sh
@@ -85,8 +87,6 @@ if (run_tests && requireNamespace("tinytest", quietly = TRUE)) {
 The same concepts and adjustments should carry over directly to other testing
 frameworks like **testthat**.
 
-Easy!
-
 ## Under the hood
 
 ### GitHub Actions
@@ -95,7 +95,7 @@ This all works on GH Actions because of a lightly modified workflow file. In
 short, all you need to do is tell your main checkout action to include any
 submodules. Here's what that
 [looks like](https://github.com/grantmcdermott/testpkg/blob/main/.github/workflows/R-CMD-check.yaml#L28-L32)
-for my file.
+in my case.
 
 ```yaml
    steps:
@@ -108,11 +108,10 @@ for my file.
 
 You can add tests directly to your submodule repo upstream remote
 ([here](https://github.com/grantmcdermott/testpkg-testsuite),
-in this case). Just make sure that you adjust your parent repo to pull in these
-changes.
+in this case). But don't forget to pull in these changes to your main repo too.
 
 An easier approach is probably just to do everything locally from the parent
-repo. This requires two steps and is most easily done from you terminal. For
+repo. This requires two steps and is best done from your terminal. For
 example, assume that I have added a new test to my local clone of my
 `tests/testsuite` submodule...
 
@@ -130,13 +129,8 @@ git push origin main
 Second step: Update the parent repo to pull in the latest submodule commit.
 
 ```sh
-# Update the parent repo remote
 cd ../..
 git add tests/testsuite
 git commit -m "Update submodule to latest commit"
 git push origin main
 ```
-
-
-
-
