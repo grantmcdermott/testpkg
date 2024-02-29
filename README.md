@@ -60,19 +60,25 @@ the only change we need to make is telling it to look for tests in our
 `tests/testsuite` submodule instead. For interactive testing:
 
 ```r
-tinytest::run_test_dir("tests/testsuite")                   ## run all tests
-tinytest::run_test_file("tests/testsuite/test_myplot.R")    ## run a single test file
+tinytest::run_test_dir("tests/testsuite")                ## run all tests
+tinytest::run_test_file("tests/testsuite/test_add.R")    ## run a single test file
 # etc
 ```
 
 For testing as part of `R CMD check` (or, equivalently `devtools::check()`), we
 handle the non-standard test suite location for users automatically in
 `tests/tinytest.R`
-[here](https://github.com/grantmcdermott/testpkg/blob/main/tests/tinytest.R):
+[here](https://github.com/grantmcdermott/testpkg/blob/main/tests/tinytest.R). 
+We also tell it to skip all tests on CRAN, since we won't be including those
+tests with the rest of our package submission. (Remember: The whole point is
+avoid tripping up CRAN's size limits.)
 
 ```r
-if (requireNamespace("tinytest", quietly = TRUE)) {
-  tinytest::test_package("testpkg", testdir="testsuite")
+# skip tests on CRAN
+run_tests = identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+
+if (run_tests && requireNamespace("tinytest", quietly = TRUE)) {
+  tinytest::test_package("testpkg", testdir = "testsuite")
 }
 ```
 
